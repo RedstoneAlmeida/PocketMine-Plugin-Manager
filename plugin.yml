@@ -1,0 +1,30 @@
+name: Plugin Manager
+main: Manager\Main
+version: 1.0.0
+api: 1.13.1
+description: PocketMine Server In-Game plugin Manager
+author: jasonwynn10
+
+commands:
+  manage:
+    description: "Displays commands for plugin management In-Game."
+    permission: manage.cmd
+  disable:
+    description: "Disables the selected plugin In-Game."
+    permission: disable.cmd
+    usage: "/disable <plugin name>"
+  enable:
+    description: "Enables the selected plugin In-Game."
+    permission: enable.cmd
+    usage: "/enable <plugin name>"
+
+permissions:
+  manage.cmd:
+    default: op
+    description: "Displays commands for plugin management In-Game."
+  enable.cmd:
+    default: op
+    description: "Enables the selected plugin In-Game."
+  disable.cmd:
+    default: op
+    description: "Disables the selected plugin In-Game."
