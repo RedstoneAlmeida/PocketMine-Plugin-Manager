@@ -5,8 +5,9 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\event\plugin\PluginEnableEvent;
 use pocketmine\Server;
 use pocketmine\plugin\PluginLoader;
+use pocketmine\utils\MainLogger;
 
-class Loader implements PluginLoader {
+class Loader {
 
     /** @var Server */
     private $server;
@@ -22,15 +23,11 @@ class Loader implements PluginLoader {
      * Gets the PluginDescription from the file
      *
      * @param string $file
-     *
-     * @return PluginDescription
      */
-    public function enablePlugin(Plugin $plugin) {
+    public function enablePlugin($plugin) {
         if($plugin instanceof PluginBase and !$plugin->isEnabled()){
             MainLogger::getLogger()->info("Enabling " . $plugin->getDescription()->getFullName());
-
             $plugin->setEnabled(true);
-
             Server::getInstance()->getPluginManager()->callEvent(new PluginEnableEvent($plugin));
         }
     }

@@ -5,8 +5,9 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\event\plugin\PluginDisableEvent;
 use pocketmine\Server;
 use pocketmine\plugin\PluginLoader;
+use pocketmine\utils\MainLogger;
 
-class UnLoader implements PluginLoader {
+class UnLoader {
 
     /** @var Server */
     private $server;
@@ -19,14 +20,12 @@ class UnLoader implements PluginLoader {
     }
 
     /**
-     * @param Plugin $plugin
+     * @param $plugin
      */
-    public function disablePlugin(Plugin $plugin) {
+    public function disablePlugin($plugin) {
         if($plugin instanceof PluginBase and $plugin->isEnabled()){
             MainLogger::getLogger()->info("Disabling " . $plugin->getDescription()->getFullName());
-
             Server::getInstance()->getPluginManager()->callEvent(new PluginDisableEvent($plugin));
-
             $plugin->setEnabled(false);
         }
     }

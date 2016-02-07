@@ -11,27 +11,29 @@ use pocketmine\plugin\PluginLoadOrder;
 
 class Main extends pluginBase implements Listener  {
 
+    private $plugin;
+
     public function onEnable()
     {
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
-        $this->getLogger()->alert(": This Plugin does not manage plugins loaded through the DevTools plugin.");
+        $this->getLogger()->alert(": This Plugin does not manage other plugins loaded through DevTools.");
     }
 
     public function onCommand(CommandSender $sender, Command $cmd, $label, array $args)
     {
         if(strtolower($cmd->getName())==="manage") {
-            $sender->sendMessage(Color::YELLOW . "");
+            $sender->sendMessage(Color::YELLOW . "Filler Text.");
             return true;
         }
         if(strtolower($cmd->getName())==="enable") {
             if(count($args) === 1) {
                 if($this->pEnable()) {
-                    $sender->sendMessage(Color::YELLOW."$args[1] has been re-enabled!");
+                    $this->getServer()->broadcastMessage(Color::YELLOW."$args[1] has been Re-Enabled!");
+                    return true;
                 }else{
-                    $sender->sendMessage(Color::BOLD.Color::RED."$args[1] failed to be re-enabled!");
+                    $sender->sendMessage(Color::YELLOW."$args[1] is already Enabled!");
+                    return true;
                 }
-                $this->getServer()->broadcastMessage(Color::YELLOW."$args[1] has been re-enabled!");
-                return true;
             }else{
                 $sender->sendMessage(Color::YELLOW . "There needs to be only one argument after this command.");
                 return false;
@@ -39,10 +41,16 @@ class Main extends pluginBase implements Listener  {
         }
         if(strtolower($cmd->getName())==="disable") {
             if(count($args) === 1) {
-                if($this->pDisable()){
-                    $sender->sendMessage(Color::YELLOW."$args[1] has been disabled!");
+                if(!strtolower($args[0])==="plugmanager") {
+                    if($this->pDisable()){
+                        $this->getServer()->broadcastMessage(Color::YELLOW."$args[1] has been disabled!");
+                        return true;
+                    }else{
+                        $sender->sendMessage(Color::YELLOW."$args[1] is already Disabled!");
+                        return true;
+                    }
                 }else{
-                    $sender->sendMessage(Color::BOLD.Color::RED."$args[1] failed to be disabled!");
+                    $sender->sendMessage(Color::BOLD.Color::RED."You can't disable the Plugin Manager!");
                 }
                 return true;
             }else{
@@ -54,16 +62,31 @@ class Main extends pluginBase implements Listener  {
     }
 
     public function pEnable() {
-        $this->getServer()->getPluginManager()->registerInterface("FolderPluginLoader\\FolderPluginLoader");
-        $this->getServer()->getPluginManager()->loadPlugins($this->getServer()->getPluginPath(), ["FolderPluginLoader\\FolderPluginLoader"]);
-        $this->getServer()->enablePlugins(PluginLoadOrder::POSTWORLD);
+        if(!$this->checkEnabled($this->plugin)) {
+            $this->getServer()->getPluginManager()->registerInterface("FolderPluginLoader\\FolderPluginLoader");
+            $this->getServer()->getPluginManager()->loadPlugins($this->getServer()->getPluginPath(), ["FolderPluginLoader\\FolderPluginLoader"]);
+            $this->getServer()->enablePlugins(PluginLoadOrder::POSTWORLD);
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public function pDisable() {
-
+        if($this->checkEnabled($this->plugin)) {
+            $this->getServer()->disablePlugins();
+            return true;
+        }else{
+            return false;
+        }
     }
 
-    public function checkEnabled() {
+    public function checkEnabled($p) {
+        if($p) {
+            return true;
+        }else{
+            return false;
+        }
 
     }
 }
