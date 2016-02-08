@@ -1,6 +1,6 @@
 name: PlugManager
 main: Manager\Main
-version: 1.0.0
+version: 0.0.2_beta
 api: 1.13.1
 description: PocketMine Server In-Game Plugin Manager
 author: jasonwynn10
