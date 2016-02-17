@@ -7,7 +7,7 @@ Main command: **manage**, **manager**
 
 |Sub-command|Description|
 |-----------|-----------|
-|**enable**, **a**|Enables chosen plugin|
+|**enable**|Enables chosen plugin|
 |**disable**|Disables chosen plugin|
 
 ###Permissions:
